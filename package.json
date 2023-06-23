@@ -1,0 +1,18 @@
+{
+  "name": "file-manager",
+  "version": "1.0.0",
+  "description": "File Manager using Node.js APIs",
+  "main": "main.js",
+  "type": "module",
+  "scripts": {
+    "start": "node src/main.js",
+    "start:name": "node src/main.js --username=Evgenia"
+  },
+  "keywords": [
+    "nodejs",
+    "CLI",
+    "Streams API"
+  ],
+  "author": "ChernyavskayaEv",
+  "license": "ISC"
+}
