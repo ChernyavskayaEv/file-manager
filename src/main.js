@@ -1,6 +1,7 @@
 import process from 'process';
 import { changeDirectory, folderContents } from './nwd.js';
 import { read, create, rename, copy, move, remove } from './bowf.js';
+import { osi } from './os.js';
 
 process.on('SIGINT', () => {
   console.log(`\n${farewell}\n`);
@@ -59,6 +60,10 @@ readable.on('data', (chunk) => {
       break;
     case 'rm':
       remove(chunkStringified);
+      break;
+    case 'os':
+      const secondaryCommand = chunkStringified.replace(re1, '$3');
+      osi(secondaryCommand);
       break;
     default:
       console.log('Invalid input');
