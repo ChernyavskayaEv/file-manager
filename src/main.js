@@ -1,5 +1,6 @@
 import process from 'process';
 import { changeDirectory, folderContents } from './nwd.js';
+import { read, create, rename, copy, move, remove } from './bowf.js';
 
 process.on('SIGINT', () => {
   console.log(`\n${farewell}\n`);
@@ -7,9 +8,6 @@ process.on('SIGINT', () => {
 });
 
 const readable = process.stdin;
-const writable = process.stdout;
-
-const location = `You are currently in ${process.cwd()}`;
 
 const userName = process.argv
   .filter((arg) => arg.startsWith('--username='))
@@ -23,7 +21,9 @@ const farewell = userName
   ? `Thank you for using File Manager, ${userName.slice(11)}, goodbye! `
   : 'Thank you for using File Manager, Anonymous, goodbye! ';
 
-console.log(`${greeting}\n\n${location}\n`);
+console.log(`${greeting}\n\nYou are currently in ${process.cwd()}\n`);
+
+const re1 = /(\S+)(\s+)(\S+)/;
 
 readable.on('data', (chunk) => {
   const chunkStringified = chunk.toString().trim();
@@ -36,14 +36,33 @@ readable.on('data', (chunk) => {
       changeDirectory('..');
       break;
     case 'cd':
-      const directoryPath = chunkStringified.slice(3);
+      const directoryPath = chunkStringified.replace(re1, '$3');
       changeDirectory(directoryPath);
       break;
     case 'ls':
       folderContents();
       break;
+    case 'cat':
+      read(chunkStringified);
+      break;
+    case 'add':
+      create(chunkStringified);
+      break;
+    case 'rn':
+      rename(chunkStringified);
+      break;
+    case 'cp':
+      copy(chunkStringified);
+      break;
+    case 'mv':
+      move(chunkStringified);
+      break;
+    case 'rm':
+      remove(chunkStringified);
+      break;
     default:
       console.log('Invalid input');
+      console.log(`You are currently in ${process.cwd()}`);
       break;
   }
 });
