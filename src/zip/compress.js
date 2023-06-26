@@ -2,11 +2,11 @@ import { createReadStream, createWriteStream } from 'node:fs';
 import { createBrotliCompress } from 'node:zlib';
 import { pipeline } from 'node:stream';
 
-const re2 = /(\S+)(\s+)(\S+)(\s+)(\S+)/;
+import { firstPath, secondPath } from '../constants.js';
 
 export const compressed = async (str) => {
-  const pathToFail = str.replace(re2, '$3');
-  const pathToDestination = str.replace(re2, '$5');
+  const pathToFail = firstPath(str);
+  const pathToDestination = secondPath(str);
 
   const source = createReadStream(pathToFail);
 

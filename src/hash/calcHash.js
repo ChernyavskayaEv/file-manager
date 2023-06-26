@@ -1,14 +1,13 @@
 import { readFile } from 'node:fs/promises';
 import { createHash } from 'node:crypto';
 
-const re1 = /(\S+)(\s+)(\S+)/;
+import { onePath } from '../constants.js';
 
 export const calculateHash = async (str) => {
   try {
-    const fileName = str.replace(re1, '$3');
+    const fileName = onePath(str);
 
     const contents = await readFile(fileName, { encoding: 'utf8' });
-    console.log(contents);
     const hash = createHash('SHA256').update(contents).digest('hex');
 
     console.log(hash);

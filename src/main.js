@@ -1,8 +1,14 @@
 import process from 'process';
-import { changeDirectory, folderContents } from './nwd.js';
-import { read, create, rename, copy, move, remove } from './bowf.js';
-import { osi } from './os.js';
-import { calculateHash } from './calcHash.js';
+
+import { greeting, farewell, onePath } from './constants.js';
+import { changeDirectory } from './nwd/changeDirectory.js';
+import { folderContents } from './nwd/folderContents.js';
+import { copy, move, remove } from './bo/bowf.js';
+import { read } from './bo/read.js';
+import { create } from './bo/create.js';
+import { rename } from './bo/rename.js';
+import { osi } from './os/os.js';
+import { calculateHash } from './hash/calcHash.js';
 import { compressed } from './zip/compress.js';
 import { decompressed } from './zip/decompress.js';
 
@@ -13,21 +19,7 @@ process.on('SIGINT', () => {
 
 const readable = process.stdin;
 
-const userName = process.argv
-  .filter((arg) => arg.startsWith('--username='))
-  .toString();
-
-const greeting = userName
-  ? `Welcome to the File Manager, ${userName.slice(11)}!`
-  : 'Welcome to the File Manager, Anonymous!';
-
-const farewell = userName
-  ? `Thank you for using File Manager, ${userName.slice(11)}, goodbye! `
-  : 'Thank you for using File Manager, Anonymous, goodbye! ';
-
 console.log(`${greeting}\n\nYou are currently in ${process.cwd()}\n`);
-
-const re1 = /(\S+)(\s+)(\S+)/;
 
 readable.on('data', (chunk) => {
   const chunkStringified = chunk.toString().trim();
@@ -40,7 +32,7 @@ readable.on('data', (chunk) => {
       changeDirectory('..');
       break;
     case 'cd':
-      const directoryPath = chunkStringified.replace(re1, '$3');
+      const directoryPath = onePath(chunkStringified);
       changeDirectory(directoryPath);
       break;
     case 'ls':
@@ -65,7 +57,7 @@ readable.on('data', (chunk) => {
       remove(chunkStringified);
       break;
     case 'os':
-      const secondaryCommand = chunkStringified.replace(re1, '$3');
+      const secondaryCommand = onePath(chunkStringified);
       osi(secondaryCommand);
       break;
     case 'hash':

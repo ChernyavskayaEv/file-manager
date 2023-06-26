@@ -1,16 +1,6 @@
 import { readdir, stat } from 'node:fs/promises';
 import path from 'path';
 
-export const changeDirectory = async (directoryPath) => {
-  try {
-    process.chdir(directoryPath);
-    console.log(`You are currently in ${process.cwd()}`);
-  } catch (err) {
-    console.error('Operation failed');
-    console.log(`You are currently in ${process.cwd()}`);
-  }
-};
-
 export const folderContents = async () => {
   const pathToWorkingDirectory = process.cwd();
 
