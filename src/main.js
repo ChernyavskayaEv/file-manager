@@ -2,6 +2,9 @@ import process from 'process';
 import { changeDirectory, folderContents } from './nwd.js';
 import { read, create, rename, copy, move, remove } from './bowf.js';
 import { osi } from './os.js';
+import { calculateHash } from './calcHash.js';
+import { compressed } from './zip/compress.js';
+import { decompressed } from './zip/decompress.js';
 
 process.on('SIGINT', () => {
   console.log(`\n${farewell}\n`);
@@ -64,6 +67,15 @@ readable.on('data', (chunk) => {
     case 'os':
       const secondaryCommand = chunkStringified.replace(re1, '$3');
       osi(secondaryCommand);
+      break;
+    case 'hash':
+      calculateHash(chunkStringified);
+      break;
+    case 'compress':
+      compressed(chunkStringified);
+      break;
+    case 'decompress':
+      decompressed(chunkStringified);
       break;
     default:
       console.log('Invalid input');
